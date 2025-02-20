@@ -15,6 +15,8 @@ class ListViewModel: ObservableObject {
     @Published var textFieldText: String = ""
     @Published var items: [ItemModel] = []
     @Published var showWarning: Bool = false
+    @Published var animate: Bool = false
+    let secondaryAccentColor = Color(.green)
     
     
     
@@ -52,6 +54,20 @@ class ListViewModel: ObservableObject {
         }
     }
     
+    func addAnimation(){
+        guard !animate else {
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5){
+            withAnimation(
+                Animation
+                    .easeInOut(duration: 2.0)
+                    .repeatForever()
+            ) {
+                self.animate.toggle()
+            }
+        }
+    }
    
     
     

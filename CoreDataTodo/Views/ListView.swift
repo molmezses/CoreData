@@ -5,6 +5,7 @@
 //  Created by Mustafa Ölmezses on 19.02.2025.
 //
 
+
 import SwiftUI
 
 struct ListView: View {
@@ -13,14 +14,21 @@ struct ListView: View {
     
     var body: some View {
         NavigationStack{
-            List {
-                ForEach(viewModel.items) { item in
-                    ListRowView(title: item.title, isComplated: item.isCompleted)
+            ZStack{
+                if viewModel.items.isEmpty {
+                    NoItemsView()
+                        .transition(AnyTransition.opacity.animation(.easeIn))
+                }else{
+                    List {
+                        ForEach(viewModel.items) { item in
+                            ListRowView(title: item.title, isComplated: item.isCompleted)
+                        }
+                        .onDelete(perform: viewModel.deleteItems)
+                    }
+                    .listStyle(.plain)
                 }
-                .onDelete(perform: viewModel.deleteItems)
             }
-            .navigationTitle("ToDo Lists 📝")
-            .listStyle(PlainListStyle())
+            .navigationTitle("Todo List🔖")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     EditButton()
@@ -28,22 +36,23 @@ struct ListView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         AddView()
-                            .navigationBarBackButtonHidden()    
+                            .navigationBarBackButtonHidden()
                     } label: {
                         Image(systemName: "plus.square.fill")
                             .font(.title)
                             .foregroundStyle(.green)
                     }
-
                 }
             }
         }
     }
-    
-    
 }
 
 #Preview {
-    ListView()
-        .environmentObject(ListViewModel())
+    NavigationStack{
+        ListView()
+    }
+    .environmentObject(ListViewModel())
 }
+
+
