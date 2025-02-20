@@ -12,6 +12,7 @@ struct CoreDataTodoApp: App {
     var body: some Scene {
         WindowGroup {
             ListView()
+                .environmentObject(ListViewModel())
         }
     }
 }
