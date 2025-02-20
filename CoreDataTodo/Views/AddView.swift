@@ -12,10 +12,19 @@ struct AddView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var viewModel : ListViewModel
     
+    
     var body: some View {
         NavigationStack{
             ScrollView {
                 VStack {
+                    if viewModel.showWarning{
+                        Text("Please enter a value longer than 5 characters")
+                            .font(.footnote)
+                            .foregroundStyle(.red)
+                            .frame(maxWidth: .infinity , alignment: .leading)
+                            .padding(.horizontal)
+                            .bold()
+                    }
                     TextField("Add a something here...", text: $viewModel.textFieldText)
                         .font(.headline)
                         .padding(.leading)
@@ -23,11 +32,17 @@ struct AddView: View {
                         .frame(height: 55)
                         .background(Color(.systemGray6))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .padding()
+                        .padding(.horizontal)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(viewModel.showWarning ? Color.red : .clear)
+                                .padding(.horizontal)
+                        }
+                        
                     
                     Button {
-                        viewModel.addItem()
-                        dismiss()
+                        viewModel.saveButtonPressed()
+                        !viewModel.showWarning ? dismiss() : nil
                     } label: {
                         Text("Submit")
                             .font(.headline)
@@ -38,7 +53,7 @@ struct AddView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                             .padding(.horizontal)
                     }
-
+                    .padding(.top)
                 }
             }
             .navigationTitle("Add New Todo ✏️")
@@ -49,9 +64,8 @@ struct AddView: View {
                         dismiss()
                     } label: {
                         Image(systemName: "chevron.left")
-                            .bold()
                             .font(.title)
-                            .foregroundStyle(.green)
+                            .foregroundStyle(.gray)
                     }
 
                 }

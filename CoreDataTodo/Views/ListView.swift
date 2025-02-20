@@ -28,7 +28,7 @@ struct ListView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         AddView()
-                            .navigationBarBackButtonHidden()
+                            .navigationBarBackButtonHidden()    
                     } label: {
                         Image(systemName: "plus.square.fill")
                             .font(.title)

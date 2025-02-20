@@ -11,6 +11,7 @@ struct ListRowView: View {
     
     @State var title: String
     @State var isComplated: Bool = false
+
     
     var body: some View {
         HStack {
@@ -19,12 +20,19 @@ struct ListRowView: View {
                 .foregroundStyle(isComplated ? .green : .red)
             Text(title)
                 .font(.headline)
+                .foregroundStyle(isComplated ? Color(.systemGray) : .primary)
             Spacer()
         }
         .padding(4)
+        .onTapGesture {
+            withAnimation(.spring){
+                isComplated.toggle()
+            }
+        }
     }
 }
 
 #Preview {
-    ListRowView(title: "This is item")
+    ListRowView(title: "This is item", isComplated: false)
+    
 }

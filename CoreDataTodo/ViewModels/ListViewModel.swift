@@ -14,6 +14,7 @@ class ListViewModel: ObservableObject {
     
     @Published var textFieldText: String = ""
     @Published var items: [ItemModel] = []
+    @Published var showWarning: Bool = false
     
     
     
@@ -22,7 +23,6 @@ class ListViewModel: ObservableObject {
     }
     
     func addItem() {
-        guard !textFieldText.isEmpty else {return}
         let newItem = ItemModel(title: textFieldText, isCompleted: false)
         items.append(newItem)
         textFieldText = ""
@@ -41,5 +41,19 @@ class ListViewModel: ObservableObject {
     func deleteItems(indexSet: IndexSet) {
         items.remove(atOffsets: indexSet)
     }
+    
+    func saveButtonPressed(){
+        if textFieldText.isEmpty || textFieldText.count < 5 {
+            showWarning = true
+        }else{
+            showWarning = false
+            addItem()
+            print("Successfully saved!")
+        }
+    }
+    
+   
+    
+    
     
 }
