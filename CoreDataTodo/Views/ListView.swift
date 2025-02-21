@@ -21,7 +21,7 @@ struct ListView: View {
                 }else{
                     List {
                         ForEach(viewModel.items) { item in
-                            ListRowView(title: item.title, isComplated: item.isCompleted)
+                            ListRowView(title: item.title ?? "no", isComplated: item.isCompleted)
                         }
                         .onDelete(perform: viewModel.deleteItems)
                     }

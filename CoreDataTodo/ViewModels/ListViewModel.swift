@@ -7,39 +7,24 @@
 
 import Foundation
 import SwiftUI
-
-
+import CoreData
 
 class ListViewModel: ObservableObject {
     
     @Published var textFieldText: String = ""
-    @Published var items: [ItemModel] = []
     @Published var showWarning: Bool = false
     @Published var animate: Bool = false
     let secondaryAccentColor = Color(.green)
+    let manager = CoreDataManager.instance
+    @Published var items : [ItemEntity] = []
     
     
     
     init() {
-        getItems()
+        fetchData()
     }
     
-    func addItem() {
-        let newItem = ItemModel(title: textFieldText, isCompleted: false)
-        items.append(newItem)
-        textFieldText = ""
-        
-    }
-    
-    func getItems() {
-        let newItems = [
-            ItemModel(title: "This is todo item one", isCompleted: true),
-            ItemModel(title: "This is two", isCompleted: false),
-            ItemModel(title: "Third!", isCompleted: true),
-        ]
-        items.append(contentsOf: newItems)
-    }
-    
+   
     func deleteItems(indexSet: IndexSet) {
         items.remove(atOffsets: indexSet)
     }
@@ -49,7 +34,7 @@ class ListViewModel: ObservableObject {
             showWarning = true
         }else{
             showWarning = false
-            addItem()
+            addData()
             print("Successfully saved!")
         }
     }
@@ -66,6 +51,33 @@ class ListViewModel: ObservableObject {
             ) {
                 self.animate.toggle()
             }
+        }
+    }
+    
+    func addData(){
+        let newData = ItemEntity(context: manager.context)
+        newData.title =  "deneme 1"
+        newData.isCompleted = false
+        manager.saveData()
+        save()
+    }
+    
+    func fetchData(){
+        let request = NSFetchRequest<ItemEntity>(entityName: "ItemEntity")
+        
+        do{
+            items = try manager.context.fetch(request)
+        }catch{
+            print("Error Fetching data \(error.localizedDescription)")
+        }
+    }
+    
+    func save(){
+        items.removeAll()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+            self.fetchData()
+            self.manager.saveData()
         }
     }
    

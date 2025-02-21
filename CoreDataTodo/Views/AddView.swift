@@ -11,8 +11,8 @@ struct AddView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var viewModel : ListViewModel
-    
-    
+    @FocusState var isFocused: Bool
+
     var body: some View {
         NavigationStack{
             ScrollView {
@@ -38,6 +38,7 @@ struct AddView: View {
                                 .stroke(viewModel.showWarning ? Color.red : .clear)
                                 .padding(.horizontal)
                         }
+                        .focused($isFocused)
                         
                     
                     Button {
@@ -54,6 +55,9 @@ struct AddView: View {
                             .padding(.horizontal)
                     }
                     .padding(.top)
+                }
+                .onAppear{
+                    isFocused = true
                 }
             }
             .navigationTitle("Add New Todo ✏️")
