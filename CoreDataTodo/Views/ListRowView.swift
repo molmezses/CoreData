@@ -11,6 +11,7 @@ struct ListRowView: View {
     
     @State var title: String
     @State var isComplated: Bool = false
+    @EnvironmentObject var viewModel : ListViewModel
 
     
     var body: some View {
@@ -24,11 +25,6 @@ struct ListRowView: View {
             Spacer()
         }
         .padding(4)
-        .onTapGesture {
-            withAnimation(.spring){
-                isComplated.toggle()
-            }
-        }
     }
 }
 

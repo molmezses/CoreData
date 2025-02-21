@@ -22,6 +22,9 @@ struct ListView: View {
                     List {
                         ForEach(viewModel.items) { item in
                             ListRowView(title: item.title ?? "no", isComplated: item.isCompleted)
+                                .onTapGesture {
+                                    viewModel.updateData(entity: item)
+                                }
                         }
                         .onDelete(perform: viewModel.deleteItems)
                     }

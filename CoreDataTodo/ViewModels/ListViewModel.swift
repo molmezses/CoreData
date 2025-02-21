@@ -56,7 +56,7 @@ class ListViewModel: ObservableObject {
     
     func addData(){
         let newData = ItemEntity(context: manager.context)
-        newData.title =  "deneme 1"
+        newData.title =  textFieldText
         newData.isCompleted = false
         manager.saveData()
         save()
@@ -70,6 +70,11 @@ class ListViewModel: ObservableObject {
         }catch{
             print("Error Fetching data \(error.localizedDescription)")
         }
+    }
+    
+    func updateData(entity: ItemEntity){
+        entity.isCompleted.toggle()
+        save()
     }
     
     func save(){
