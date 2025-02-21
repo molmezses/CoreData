@@ -15,9 +15,13 @@ struct ListView: View {
     var body: some View {
         NavigationStack{
             ZStack{
-                if viewModel.items.isEmpty {
+                if viewModel.items.isEmpty{
                     NoItemsView()
                         .transition(AnyTransition.opacity.animation(.easeIn))
+                        .opacity(viewModel.isUpdate ? 0 : 1)
+                        
+                        
+                    
                 }else{
                     List {
                         ForEach(viewModel.items) { item in
@@ -35,6 +39,7 @@ struct ListView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     EditButton()
+                        .opacity(viewModel.items.count == 0 ? 0 : 1)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {

@@ -15,6 +15,7 @@ struct NoItemsView: View {
         NavigationStack{
             ScrollView{
                 VStack{
+                    
                     Text("There are no items!")
                         .font(.title)
                         .fontWeight(.semibold)
@@ -46,6 +47,9 @@ struct NoItemsView: View {
             }
             .frame(maxWidth: .infinity , maxHeight: .infinity)
         }
+        .onAppear{
+            viewModel.animate = true
+        }
     }
 }
 
@@ -53,6 +57,7 @@ struct NoItemsView: View {
     NavigationStack{
         NoItemsView()
             .navigationTitle("title")
+            .environmentObject(ListViewModel())
     }
     
 }

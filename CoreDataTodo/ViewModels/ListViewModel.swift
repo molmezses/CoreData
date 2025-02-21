@@ -17,6 +17,7 @@ class ListViewModel: ObservableObject {
     let secondaryAccentColor = Color(.green)
     let manager = CoreDataManager.instance
     @Published var items : [ItemEntity] = []
+    @Published var isUpdate: Bool = false
     
     
     
@@ -26,7 +27,12 @@ class ListViewModel: ObservableObject {
     
    
     func deleteItems(indexSet: IndexSet) {
-        items.remove(atOffsets: indexSet)
+        indexSet.forEach { index in
+            let entity = items[index]
+            manager.context.delete(entity)
+        }
+        manager.saveData()
+        fetchData()
     }
     
     func saveButtonPressed(){
@@ -62,25 +68,35 @@ class ListViewModel: ObservableObject {
         save()
     }
     
-    func fetchData(){
+    func fetchData() {
         let request = NSFetchRequest<ItemEntity>(entityName: "ItemEntity")
         
-        do{
+        do {
             items = try manager.context.fetch(request)
-        }catch{
+        } catch {
             print("Error Fetching data \(error.localizedDescription)")
+        }
+        
+        if self.items.count > 0 {
+            isUpdate = false
         }
     }
     
     func updateData(entity: ItemEntity){
         entity.isCompleted.toggle()
-        save()
+        self.manager.saveData()
+        isUpdate = true
+        self.items.removeAll()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.00000){
+            self.fetchData()
+        }
+
     }
     
     func save(){
         items.removeAll()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
             self.fetchData()
             self.manager.saveData()
         }
